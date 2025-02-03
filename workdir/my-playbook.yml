@@ -1,0 +1,25 @@
+- name: lab1 solution
+  hosts: hosts
+  tasks:
+    - name: update cache
+      apt:
+        update_cache: true
+
+    - name: install latest nginx
+      apt:
+        name: nginx
+        state: latest
+
+    - name: copy file to host
+      copy:
+        src: ./index.html
+        dest: /var/www/html/index.html
+        mode: "0644"
+
+    - name: restart nginx service
+      command: /etc/init.d/nginx restart
+      register: nginx_restart_output
+
+    - name: debug NGINX restarting
+      debug:
+        var: nginx_restart_output.stdout
